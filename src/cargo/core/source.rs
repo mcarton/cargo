@@ -108,7 +108,7 @@ impl SourceId {
                 let mut url = url.to_url().unwrap();
                 let mut reference = GitReference::Branch("master".to_owned());
                 let pairs = url.query_pairs().unwrap_or(Vec::new());
-                for &(ref k, ref v) in pairs.iter() {
+                for &(ref k, ref v) in &pairs {
                     match &k[..] {
                         // map older 'ref' to branch
                         "branch" |
@@ -458,7 +458,7 @@ impl<'src> Registry for SourceSet<'src> {
     fn query(&mut self, name: &Dependency) -> CargoResult<Vec<Summary>> {
         let mut ret = Vec::new();
 
-        for source in self.sources.iter_mut() {
+        for source in &mut self.sources {
             ret.extend(try!(source.query(name)).into_iter());
         }
 
@@ -468,7 +468,7 @@ impl<'src> Registry for SourceSet<'src> {
 
 impl<'src> Source for SourceSet<'src> {
     fn update(&mut self) -> CargoResult<()> {
-        for source in self.sources.iter_mut() {
+        for source in &mut self.sources {
             try!(source.update());
         }
 
@@ -476,7 +476,7 @@ impl<'src> Source for SourceSet<'src> {
     }
 
     fn download(&mut self, packages: &[PackageId]) -> CargoResult<()> {
-        for source in self.sources.iter_mut() {
+        for source in &mut self.sources {
             try!(source.download(packages));
         }
 
@@ -486,7 +486,7 @@ impl<'src> Source for SourceSet<'src> {
     fn get(&self, packages: &[PackageId]) -> CargoResult<Vec<Package>> {
         let mut ret = Vec::new();
 
-        for source in self.sources.iter() {
+        for source in &self.sources {
             ret.extend(try!(source.get(packages)).into_iter());
         }
 
@@ -495,7 +495,7 @@ impl<'src> Source for SourceSet<'src> {
 
     fn fingerprint(&self, id: &Package) -> CargoResult<String> {
         let mut ret = String::new();
-        for source in self.sources.iter() {
+        for source in &self.sources {
             ret.push_str(&try!(source.fingerprint(id))[..]);
         }
         Ok(ret)

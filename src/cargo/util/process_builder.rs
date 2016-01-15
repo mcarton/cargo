@@ -20,7 +20,7 @@ impl fmt::Display for ProcessBuilder {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         try!(write!(f, "`{}", self.program.to_string_lossy()));
 
-        for arg in self.args.iter() {
+        for arg in &self.args {
             try!(write!(f, " {}", escape(arg.to_string_lossy())));
         }
 
@@ -112,10 +112,10 @@ impl ProcessBuilder {
         if let Some(cwd) = self.get_cwd() {
             command.current_dir(cwd);
         }
-        for arg in self.args.iter() {
+        for arg in &self.args {
             command.arg(arg);
         }
-        for (k, v) in self.env.iter() {
+        for (k, v) in &self.env {
             match *v {
                 Some(ref v) => { command.env(k, v); }
                 None => { command.env_remove(k); }
@@ -126,7 +126,7 @@ impl ProcessBuilder {
 
     fn debug_string(&self) -> String {
         let mut program = format!("{}", self.program.to_string_lossy());
-        for arg in self.args.iter() {
+        for arg in &self.args {
             program.push(' ');
             program.push_str(&format!("{}", arg.to_string_lossy()));
         }

@@ -158,7 +158,7 @@ impl PackageSet {
     pub fn sort(&self) -> Option<PackageSet> {
         let mut graph = graph::Graph::new();
 
-        for pkg in self.packages.iter() {
+        for pkg in &self.packages {
             let deps: Vec<&str> = pkg.dependencies().iter()
                 .map(|dep| dep.name())
                 .collect();

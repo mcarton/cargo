@@ -136,12 +136,12 @@ fn run_doc_tests(options: &TestOptions,
                 p.arg("--test-args").arg(&test_args.connect(" "));
             }
 
-            for cfg in compilation.cfgs.iter() {
+            for cfg in &compilation.cfgs {
                 p.arg("--cfg").arg(cfg);
             }
 
-            for (_, libs) in compilation.libraries.iter() {
-                for &(ref target, ref lib) in libs.iter() {
+            for (_, libs) in &compilation.libraries {
+                for &(ref target, ref lib) in libs {
                     // Note that we can *only* doctest rlib outputs here.  A
                     // staticlib output cannot be linked by the compiler (it just
                     // doesn't do that). A dylib output, however, can be linked by

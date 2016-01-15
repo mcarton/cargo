@@ -155,10 +155,10 @@ impl PackageIdSpec {
                     ids: Vec<&PackageId>,
                     spec: &PackageIdSpec) {
             let mut version_cnt = HashMap::new();
-            for id in ids.iter() {
+            for id in &ids {
                 *version_cnt.entry(id.version()).or_insert(0) += 1;
             }
-            for id in ids.iter() {
+            for id in &ids {
                 if version_cnt[id.version()] == 1 {
                     msg.push_str(&format!("\n  {}:{}", spec.name(),
                                           id.version()));

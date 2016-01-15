@@ -31,7 +31,7 @@ struct Transaction {
 
 impl Drop for Transaction {
     fn drop(&mut self) {
-        for bin in self.bins.iter() {
+        for bin in &self.bins {
             let _ = fs::remove_file(bin);
         }
     }
@@ -74,7 +74,7 @@ pub fn install(root: Option<&str>,
 
     let mut t = Transaction { bins: Vec::new() };
     try!(fs::create_dir_all(&dst));
-    for bin in compile.binaries.iter() {
+    for bin in &compile.binaries {
         let dst = dst.join(bin.file_name().unwrap());
         try!(config.shell().status("Installing", dst.display()));
         try!(fs::copy(&bin, &dst).chain_error(|| {
@@ -266,7 +266,7 @@ pub fn install_list(dst: Option<&str>, config: &Config) -> CargoResult<()> {
     let list = try!(read_crate_list(&dst));
     let mut shell = config.shell();
     let out = shell.out();
-    for (k, v) in list.v1.iter() {
+    for (k, v) in &list.v1 {
         try!(writeln!(out, "{}:", k));
         for bin in v {
             try!(writeln!(out, "    {}", bin));
@@ -306,7 +306,7 @@ pub fn uninstall(root: Option<&str>,
             }
         }).collect::<Vec<_>>();
 
-        for bin in bins.iter() {
+        for bin in &bins {
             if !installed.get().contains(bin) {
                 bail!("binary `{}` not installed as part of `{}`", bin, result)
             }
@@ -316,7 +316,7 @@ pub fn uninstall(root: Option<&str>,
             to_remove.extend(installed.get().iter().map(|b| dst.join(b)));
             installed.get_mut().clear();
         } else {
-            for bin in bins.iter() {
+            for bin in &bins {
                 to_remove.push(dst.join(bin));
                 installed.get_mut().remove(bin);
             }

@@ -132,7 +132,7 @@ fn read_nested_packages(path: &Path,
     //
     // TODO: filesystem/symlink implications?
     if !source_id.is_registry() {
-        for p in nested.iter() {
+        for p in &nested {
             let path = util::normalize_path(&path.join(p));
             try!(read_nested_packages(&path, all_packages, source_id,
                                       config, visited));

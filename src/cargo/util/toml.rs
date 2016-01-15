@@ -162,7 +162,7 @@ pub fn parse(toml: &str, file: &Path) -> CargoResult<toml::Table> {
         None => {}
     }
     let mut error_str = format!("could not parse input as TOML\n");
-    for error in parser.errors.iter() {
+    for error in &parser.errors {
         let (loline, locol) = parser.to_linecol(error.lo);
         let (hiline, hicol) = parser.to_linecol(error.hi);
         error_str.push_str(&format!("{}:{}:{}{} {}\n",
@@ -428,7 +428,7 @@ impl TomlManifest {
 
         let blacklist = vec!["build", "deps", "examples", "native"];
 
-        for bin in bins.iter() {
+        for bin in &bins {
             if blacklist.iter().find(|&x| *x == bin.name()) != None {
                 bail!("the binary target name `{}` is forbidden",
                       bin.name())

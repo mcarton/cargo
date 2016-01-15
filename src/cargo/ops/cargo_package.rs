@@ -34,7 +34,7 @@ pub fn package(manifest_path: &Path,
             util::without_prefix(&file, &root).unwrap().to_path_buf()
         }).collect();
         list.sort();
-        for file in list.iter() {
+        for file in &list {
             println!("{}", file.display());
         }
         return Ok(None)
@@ -151,7 +151,7 @@ fn tar(pkg: &Package,
     // Put all package files into a compressed archive
     let ar = Archive::new(encoder);
     let root = pkg.root();
-    for file in try!(src.list_files(pkg)).iter() {
+    for file in &try!(src.list_files(pkg)) {
         if &**file == dst { continue }
         let relative = util::without_prefix(&file, &root).unwrap();
         try!(check_filename(relative));

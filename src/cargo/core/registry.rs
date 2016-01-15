@@ -165,7 +165,7 @@ impl<'cfg> PackageRegistry<'cfg> {
     }
 
     pub fn add_overrides(&mut self, ids: Vec<SourceId>) -> CargoResult<()> {
-        for id in ids.iter() {
+        for id in &ids {
             try!(self.load(id, Kind::Override));
         }
         Ok(())
@@ -203,7 +203,7 @@ impl<'cfg> PackageRegistry<'cfg> {
                        -> CargoResult<Vec<Summary>> {
         let mut seen = HashSet::new();
         let mut ret = Vec::new();
-        for s in self.overrides.iter() {
+        for s in &self.overrides {
             let src = self.sources.get_mut(s).unwrap();
             let dep = Dependency::new_override(dep.name(), s);
             ret.extend(try!(src.query(&dep)).into_iter().filter(|s| {

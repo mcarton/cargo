@@ -26,7 +26,7 @@ pub fn doc(manifest_path: &Path,
                 assert!(bin_names.insert(target.crate_name()));
             }
         }
-        for bin in bin_names.iter() {
+        for bin in &bin_names {
             if lib_names.contains(bin) {
                 bail!("cannot document a package where a library and a binary \
                        have the same name. Consider renaming one or marking \

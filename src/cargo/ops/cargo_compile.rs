@@ -222,7 +222,7 @@ pub fn compile_pkg<'a>(root_package: &Package,
             }
         }
         (None, None) => {
-            for &to_build in to_builds.iter() {
+            for &to_build in &to_builds {
                 let targets = try!(generate_targets(to_build, profiles, mode,
                                                     filter, release));
                 package_targets.push((to_build, targets));
@@ -231,7 +231,7 @@ pub fn compile_pkg<'a>(root_package: &Package,
     };
 
     for &(target, ref profile) in &general_targets {
-        for &to_build in to_builds.iter() {
+        for &to_build in &to_builds {
             package_targets.push((to_build, vec![(target, profile)]));
         }
     }

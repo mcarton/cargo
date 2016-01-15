@@ -60,7 +60,7 @@ pub fn prepare_target<'a, 'cfg>(cx: &mut Context<'a, 'cfg>,
     let root = cx.out_dir(unit);
     let mut missing_outputs = false;
     if !unit.profile.doc {
-        for filename in try!(cx.target_filenames(unit)).iter() {
+        for filename in &try!(cx.target_filenames(unit)) {
             missing_outputs |= fs::metadata(root.join(filename)).is_err();
         }
     }

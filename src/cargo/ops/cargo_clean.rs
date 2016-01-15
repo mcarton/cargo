@@ -64,7 +64,7 @@ pub fn clean(manifest_path: &Path, opts: &CleanOptions) -> CargoResult<()> {
 
         // And finally, clean everything out!
         for target in pkg.targets() {
-            for kind in [Kind::Host, Kind::Target].iter() {
+            for kind in &[Kind::Host, Kind::Target] {
                 let layout = cx.layout(&pkg, *kind);
                 try!(rm_rf(&layout.proxy().fingerprint(&pkg)));
                 try!(rm_rf(&layout.build(&pkg)));
@@ -72,7 +72,7 @@ pub fn clean(manifest_path: &Path, opts: &CleanOptions) -> CargoResult<()> {
                     ref release, ref dev, ref test, ref bench, ref doc,
                     ref custom_build,
                 } = *root.manifest().profiles();
-                for profile in [release, dev, test, bench, doc, custom_build].iter() {
+                for profile in &[release, dev, test, bench, doc, custom_build] {
                     let unit = Unit {
                         pkg: &pkg,
                         target: target,
@@ -80,7 +80,7 @@ pub fn clean(manifest_path: &Path, opts: &CleanOptions) -> CargoResult<()> {
                         kind: *kind,
                     };
                     let root = cx.out_dir(&unit);
-                    for filename in try!(cx.target_filenames(&unit)).iter() {
+                    for filename in &try!(cx.target_filenames(&unit)) {
                         try!(rm_rf(&root.join(&filename)));
                     }
                 }

@@ -96,7 +96,7 @@ pub fn compile_targets<'a, 'cfg: 'a>(pkg_targets: &'a PackagesToBuild<'a>,
     try!(cx.prepare(root));
     custom_build::build_map(&mut cx, &units);
 
-    for unit in units.iter() {
+    for unit in &units {
         // Build up a list of pending jobs, each of which represent
         // compiling a particular package. No actual work is executed as
         // part of this, that's all done next as part of the `execute`
@@ -108,14 +108,14 @@ pub fn compile_targets<'a, 'cfg: 'a>(pkg_targets: &'a PackagesToBuild<'a>,
     // Now that we've figured out everything that we're going to do, do it!
     try!(queue.execute(cx.config));
 
-    for unit in units.iter() {
+    for unit in &units {
         let out_dir = cx.layout(unit.pkg, unit.kind).build_out(unit.pkg)
                         .display().to_string();
         cx.compilation.extra_env.entry(unit.pkg.package_id().clone())
           .or_insert(Vec::new())
           .push(("OUT_DIR".to_owned(), out_dir));
 
-        for filename in try!(cx.target_filenames(unit)).iter() {
+        for filename in &try!(cx.target_filenames(unit)) {
             let dst = cx.out_dir(unit).join(filename);
             if unit.profile.test {
                 cx.compilation.tests.push((unit.pkg.clone(),
@@ -131,7 +131,7 @@ pub fn compile_targets<'a, 'cfg: 'a>(pkg_targets: &'a PackagesToBuild<'a>,
             if !unit.target.is_lib() { continue }
 
             // Include immediate lib deps as well
-            for unit in cx.dep_targets(unit).iter() {
+            for unit in &cx.dep_targets(unit) {
                 let pkgid = unit.pkg.package_id();
                 if !unit.target.is_lib() { continue }
                 if unit.profile.doc { continue }
@@ -159,7 +159,7 @@ pub fn compile_targets<'a, 'cfg: 'a>(pkg_targets: &'a PackagesToBuild<'a>,
         if pkg == root_pkg {
             cx.compilation.cfgs.extend(output.cfgs.iter().cloned());
         }
-        for dir in output.library_paths.iter() {
+        for dir in &output.library_paths {
             cx.compilation.native_dirs.insert(pkg.clone(), dir.clone());
         }
     }
@@ -196,7 +196,7 @@ fn compile<'a, 'cfg: 'a>(cx: &mut Context<'a, 'cfg>,
     drop(p);
 
     // Be sure to compile all dependencies of this target as well.
-    for unit in cx.dep_targets(unit).iter() {
+    for unit in &cx.dep_targets(unit) {
         try!(compile(cx, jobs, unit));
     }
     Ok(())
@@ -261,7 +261,7 @@ fn rustc(cx: &mut Context, unit: &Unit) -> CargoResult<Work> {
 
         // FIXME(rust-lang/rust#18913): we probably shouldn't have to do
         //                              this manually
-        for filename in filenames.iter() {
+        for filename in &filenames {
             let dst = root.join(filename);
             if fs::metadata(&dst).is_ok() {
                 try!(fs::remove_file(&dst));
@@ -303,12 +303,12 @@ fn rustc(cx: &mut Context, unit: &Unit) -> CargoResult<Work> {
                        build_scripts: &BuildScripts,
                        pass_l_flag: bool,
                        current_id: &PackageId) -> CargoResult<()> {
-        for key in build_scripts.to_link.iter() {
+        for key in &build_scripts.to_link {
             let output = try!(build_state.get(key).chain_error(|| {
                 internal(format!("couldn't find build state for {}/{:?}",
                                  key.0, key.1))
             }));
-            for path in output.library_paths.iter() {
+            for path in &output.library_paths {
                 rustc.arg("-L").arg(path);
             }
             if key.0 == *current_id {
@@ -316,7 +316,7 @@ fn rustc(cx: &mut Context, unit: &Unit) -> CargoResult<Work> {
                     rustc.arg("--cfg").arg(cfg);
                 }
                 if pass_l_flag {
-                    for name in output.library_links.iter() {
+                    for name in &output.library_links {
                         rustc.arg("-l").arg(name);
                     }
                 }
@@ -340,12 +340,12 @@ fn add_plugin_deps(rustc: &mut CommandPrototype,
     let var = util::dylib_path_envvar();
     let search_path = rustc.get_env(var).unwrap_or(OsString::new());
     let mut search_path = env::split_paths(&search_path).collect::<Vec<_>>();
-    for id in build_scripts.plugins.iter() {
+    for id in &build_scripts.plugins {
         let key = (id.clone(), Kind::Host);
         let output = try!(build_state.get(&key).chain_error(|| {
             internal(format!("couldn't find libs for plugin dep {}", id))
         }));
-        for path in output.library_paths.iter() {
+        for path in &output.library_paths {
             search_path.push(path.clone());
         }
     }
@@ -409,7 +409,7 @@ fn rustdoc(cx: &mut Context, unit: &Unit) -> CargoResult<Work> {
 
     Ok(Work::new(move |desc_tx| {
         if let Some(output) = build_state.outputs.lock().unwrap().get(&key) {
-            for cfg in output.cfgs.iter() {
+            for cfg in &output.cfgs {
                 rustdoc.arg("--cfg").arg(cfg);
             }
         }
@@ -448,7 +448,7 @@ fn build_base_args(cx: &Context,
     let Profile {
         opt_level, lto, codegen_units, ref rustc_args, debuginfo,
         debug_assertions, rpath, test, doc: _doc, run_custom_build,
-        rustdoc_args: _,
+        ..
     } = *unit.profile;
     assert!(!run_custom_build);
 
@@ -561,7 +561,7 @@ fn build_deps_args(cmd: &mut CommandPrototype, cx: &Context, unit: &Unit)
         cmd.env("OUT_DIR", &layout.build_out(unit.pkg));
     }
 
-    for unit in cx.dep_targets(unit).iter() {
+    for unit in &cx.dep_targets(unit) {
         if unit.target.linkable() {
             try!(link_to(cmd, cx, unit));
         }

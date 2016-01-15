@@ -285,7 +285,7 @@ pub fn modify_owners(config: &Config, opts: &OwnersOptions) -> CargoResult<()> {
         let owners = try!(registry.list_owners(&name).map_err(|e| {
             human(format!("failed to list owners of crate {}: {}", name, e))
         }));
-        for owner in owners.iter() {
+        for owner in &owners {
             print!("{}", owner.login);
             match (owner.name.as_ref(), owner.email.as_ref()) {
                 (Some(name), Some(email)) => println!(" ({} <{}>)", name, email),

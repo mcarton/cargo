@@ -21,7 +21,7 @@ impl Summary {
     pub fn new(pkg_id: PackageId,
                dependencies: Vec<Dependency>,
                features: HashMap<String, Vec<String>>) -> CargoResult<Summary> {
-        for dep in dependencies.iter() {
+        for dep in &dependencies {
             if features.get(dep.name()).is_some() {
                 bail!("Features and dependencies cannot have the \
                        same name: `{}`", dep.name())
@@ -31,7 +31,7 @@ impl Summary {
                       dep.name())
             }
         }
-        for (feature, list) in features.iter() {
+        for (feature, list) in &features {
             for dep in list.iter() {
                 let mut parts = dep.splitn(2, '/');
                 let dep = parts.next().unwrap();

@@ -95,10 +95,10 @@ pub fn update_lockfile(manifest_path: &Path,
             };
             try!(print_change("Updating", msg));
         } else {
-            for package in removed.iter() {
+            for package in &removed {
                 try!(print_change("Removing", format!("{}", package)));
             }
-            for package in added.iter() {
+            for package in &added {
                 try!(print_change("Adding", format!("{}", package)));
             }
         }
@@ -169,7 +169,7 @@ pub fn update_lockfile(manifest_path: &Path,
             changes.entry(key(dep)).or_insert(empty.clone()).1.push(dep);
         }
 
-        for (_, v) in changes.iter_mut() {
+        for (_, v) in &mut changes {
             let (ref mut old, ref mut new) = *v;
             old.sort();
             new.sort();
