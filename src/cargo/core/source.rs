@@ -96,7 +96,7 @@ impl SourceId {
     /// use cargo::core::SourceId;
     /// SourceId::from_url("git+https://github.com/alexcrichton/\
     ///                     libssh2-static-sys#80e71a3021618eb05\
-    ///                     656c58fb7c5ef5f12bc747f".to_string());
+    ///                     656c58fb7c5ef5f12bc747f".to_owned());
     /// ```
     pub fn from_url(string: String) -> SourceId {
         let mut parts = string.splitn(2, '+');
@@ -106,7 +106,7 @@ impl SourceId {
         match kind {
             "git" => {
                 let mut url = url.to_url().unwrap();
-                let mut reference = GitReference::Branch("master".to_string());
+                let mut reference = GitReference::Branch("master".to_owned());
                 let pairs = url.query_pairs().unwrap_or(Vec::new());
                 for &(ref k, ref v) in pairs.iter() {
                     match &k[..] {
@@ -127,7 +127,7 @@ impl SourceId {
             "registry" => {
                 let url = url.to_url().unwrap();
                 SourceId::new(Kind::Registry, url)
-                         .with_precise(Some("locked".to_string()))
+                         .with_precise(Some("locked".to_owned()))
             }
             "path" => {
                 let url = url.to_url().unwrap();
@@ -150,7 +150,7 @@ impl SourceId {
                 let precise_str = if precise.is_some() {
                     format!("#{}", precise.as_ref().unwrap())
                 } else {
-                    "".to_string()
+                    "".to_owned()
                 };
 
                 format!("git+{}{}{}", url, ref_str, precise_str)
@@ -353,7 +353,7 @@ impl hash::Hash for SourceId {
 
 fn url_ref(r: &GitReference) -> String {
     match r.to_ref_string() {
-        None => "".to_string(),
+        None => "".to_owned(),
         Some(s) => format!("?{}", s),
     }
 }
@@ -506,7 +506,7 @@ mod tests {
     #[test]
     fn github_sources_equal() {
         let loc = "https://github.com/foo/bar".to_url().unwrap();
-        let master = Kind::Git(GitReference::Branch("master".to_string()));
+        let master = Kind::Git(GitReference::Branch("master".to_owned()));
         let s1 = SourceId::new(master.clone(), loc);
 
         let loc = "git://github.com/foo/bar".to_url().unwrap();
@@ -514,7 +514,7 @@ mod tests {
 
         assert_eq!(s1, s2);
 
-        let foo = Kind::Git(GitReference::Branch("foo".to_string()));
+        let foo = Kind::Git(GitReference::Branch("foo".to_owned()));
         let s3 = SourceId::new(foo, loc);
         assert!(s1 != s3);
     }

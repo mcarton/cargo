@@ -376,7 +376,7 @@ test!(cargo_compile_with_nested_deps_inferred {
         "#)
         .file("baz/src/lib.rs", r#"
             pub fn gimme() -> String {
-                "test passed".to_string()
+                "test passed".to_owned()
             }
         "#);
 
@@ -434,7 +434,7 @@ test!(cargo_compile_with_nested_deps_correct_bin {
         "#)
         .file("baz/src/lib.rs", r#"
             pub fn gimme() -> String {
-                "test passed".to_string()
+                "test passed".to_owned()
             }
         "#);
 
@@ -501,7 +501,7 @@ test!(cargo_compile_with_nested_deps_shorthand {
         "#)
         .file("baz/src/baz.rs", r#"
             pub fn gimme() -> String {
-                "test passed".to_string()
+                "test passed".to_owned()
             }
         "#);
 
@@ -570,7 +570,7 @@ test!(cargo_compile_with_nested_deps_longhand {
         "#)
         .file("baz/src/baz.rs", r#"
             pub fn gimme() -> String {
-                "test passed".to_string()
+                "test passed".to_owned()
             }
         "#);
 
@@ -2034,11 +2034,11 @@ test!(invalid_spec {
 
     assert_that(p.cargo_process("build").arg("-p").arg("notAValidDep"),
                 execs().with_status(101).with_stderr(
-                    "could not find package matching spec `notAValidDep`".to_string()));
+                    "could not find package matching spec `notAValidDep`".to_owned()));
 
     assert_that(p.cargo_process("build").arg("-p").arg("d1").arg("-p").arg("notAValidDep"),
                 execs().with_status(101).with_stderr(
-                    "could not find package matching spec `notAValidDep`".to_string()));
+                    "could not find package matching spec `notAValidDep`".to_owned()));
 
 });
 

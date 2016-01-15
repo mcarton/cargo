@@ -87,7 +87,7 @@ fn ident(url: &Url) -> String {
                    .last().map(|a| a.clone()).unwrap_or(String::new());
 
     let ident = if ident == "" {
-        "_empty".to_string()
+        "_empty".to_owned()
     } else {
         ident
     };
@@ -116,7 +116,7 @@ pub fn canonicalize_url(url: &Url) -> Url {
     // general solution, and also we're almost certainly not using the
     // same case conversion rules that GitHub does. (#84)
     if url.domain() == Some("github.com") {
-        url.scheme = "https".to_string();
+        url.scheme = "https".to_owned();
         match url.scheme_data {
             url::SchemeData::Relative(ref mut rel) => {
                 rel.port = Some(443);

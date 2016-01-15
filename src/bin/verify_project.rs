@@ -55,7 +55,7 @@ pub fn execute(args: Flags, config: &Config) -> CliResult<Option<Error>> {
     };
 
     let mut h = HashMap::new();
-    h.insert("success".to_string(), "true".to_string());
+    h.insert("success".to_owned(), "true".to_owned());
     Ok(Some(h))
 }
 

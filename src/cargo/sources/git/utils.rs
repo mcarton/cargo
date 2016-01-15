@@ -397,7 +397,7 @@ fn with_authentication<T, F>(url: &str, cfg: &git2::Config, mut f: F)
                        allowed.contains(git2::USERNAME) {
             let user = username.map(|s| s.to_string())
                                .or_else(|| cred_helper.username.clone())
-                               .unwrap_or("git".to_string());
+                               .unwrap_or("git".to_owned());
             if allowed.contains(git2::USERNAME) {
                 git2::Cred::username(&user)
             } else {

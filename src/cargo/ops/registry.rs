@@ -225,11 +225,11 @@ pub fn registry_login(config: &Config, token: String) -> CargoResult<()> {
     let p = config.cwd().to_path_buf();
     match index {
         Some(index) => {
-            map.insert("index".to_string(), ConfigValue::String(index, p.clone()));
+            map.insert("index".to_owned(), ConfigValue::String(index, p.clone()));
         }
         None => {}
     }
-    map.insert("token".to_string(), ConfigValue::String(token, p));
+    map.insert("token".to_owned(), ConfigValue::String(token, p));
 
     config::set_config(config, Location::Global, "registry",
                        ConfigValue::Table(map, PathBuf::from(".")))

@@ -47,12 +47,12 @@ pub fn write_lockfile(dst: &Path, resolve: &Resolve) -> CargoResult<()> {
     // Note that we do not use e.toml.to_string() as we want to control the
     // exact format the toml is in to ensure pretty diffs between updates to the
     // lockfile.
-    let root = e.toml.get(&"root".to_string()).unwrap();
+    let root = e.toml.get("root").unwrap();
 
     out.push_str("[root]\n");
     emit_package(root.as_table().unwrap(), &mut out);
 
-    let deps = e.toml.get(&"package".to_string()).unwrap().as_slice().unwrap();
+    let deps = e.toml.get("package").unwrap().as_slice().unwrap();
     for dep in deps.iter() {
         let dep = dep.as_table().unwrap();
 
@@ -60,7 +60,7 @@ pub fn write_lockfile(dst: &Path, resolve: &Resolve) -> CargoResult<()> {
         emit_package(dep, &mut out);
     }
 
-    match e.toml.get(&"metadata".to_string()) {
+    match e.toml.get("metadata") {
         Some(metadata) => {
             out.push_str("[metadata]\n");
             out.push_str(&metadata.to_string());

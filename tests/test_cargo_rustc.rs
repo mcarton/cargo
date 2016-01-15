@@ -352,7 +352,7 @@ test!(fail_with_multiple_packages {
 Invalid arguments.
 
 Usage:
-    cargo rustc [options] [--] [<opts>...]".to_string()));
+    cargo rustc [options] [--] [<opts>...]".to_owned()));
 });
 
 test!(rustc_with_other_profile {

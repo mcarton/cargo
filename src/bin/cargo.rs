@@ -116,7 +116,7 @@ fn execute(flags: Flags, config: &Config) -> CliResult<Option<()>> {
         // help message.
         "" | "help" if flags.arg_args.is_empty() => {
             config.shell().set_verbose(true);
-            let args = &["cargo".to_string(), "-h".to_string()];
+            let args = &["cargo".to_owned(), "-h".to_owned()];
             let r = cargo::call_main_without_stdin(execute, config, USAGE, args,
                                                    false);
             cargo::process_executed(r, &mut config.shell());
@@ -127,13 +127,13 @@ fn execute(flags: Flags, config: &Config) -> CliResult<Option<()>> {
         // message for `cargo help`
         "help" if flags.arg_args[0] == "-h" ||
                   flags.arg_args[0] == "--help" => {
-            vec!["cargo".to_string(), "help".to_string(), "-h".to_string()]
+            vec!["cargo".to_owned(), "help".to_owned(), "-h".to_owned()]
         }
 
         // For `cargo help foo`, print out the usage message for the specified
         // subcommand by executing the command with the `-h` flag.
-        "help" => vec!["cargo".to_string(), flags.arg_args[0].clone(),
-                       "-h".to_string()],
+        "help" => vec!["cargo".to_owned(), flags.arg_args[0].clone(),
+                       "-h".to_owned()],
 
         // For all other invocations, we're of the form `cargo foo args...`. We
         // use the exact environment arguments to preserve tokens like `--` for
@@ -185,7 +185,7 @@ fn execute_subcommand(config: &Config,
             return Err(human(match find_closest(config, cmd) {
                 Some(closest) => format!("no such subcommand\n\n\t\
                                           Did you mean `{}`?\n", closest),
-                None => "no such subcommand".to_string()
+                None => "no such subcommand".to_owned()
             }))
         }
     };

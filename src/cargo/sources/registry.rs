@@ -541,7 +541,7 @@ impl<'cfg> Source for RegistrySource<'cfg> {
             let mut url = url.clone();
             url.path_mut().unwrap().push(package.name().to_string());
             url.path_mut().unwrap().push(package.version().to_string());
-            url.path_mut().unwrap().push("download".to_string());
+            url.path_mut().unwrap().push("download".to_owned());
             let path = try!(self.download_package(package, &url).chain_error(|| {
                 internal(format!("failed to download package `{}` from {}",
                                  package, url))

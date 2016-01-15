@@ -229,42 +229,42 @@ mod tests {
         }
 
         ok("http://crates.io/foo#1.2.3", PackageIdSpec {
-            name: "foo".to_string(),
+            name: "foo".to_owned(),
             version: Some(Version::parse("1.2.3").unwrap()),
             url: Some(url("http://crates.io/foo").unwrap()),
         });
         ok("http://crates.io/foo#bar:1.2.3", PackageIdSpec {
-            name: "bar".to_string(),
+            name: "bar".to_owned(),
             version: Some(Version::parse("1.2.3").unwrap()),
             url: Some(url("http://crates.io/foo").unwrap()),
         });
         ok("crates.io/foo", PackageIdSpec {
-            name: "foo".to_string(),
+            name: "foo".to_owned(),
             version: None,
             url: Some(url("cargo://crates.io/foo").unwrap()),
         });
         ok("crates.io/foo#1.2.3", PackageIdSpec {
-            name: "foo".to_string(),
+            name: "foo".to_owned(),
             version: Some(Version::parse("1.2.3").unwrap()),
             url: Some(url("cargo://crates.io/foo").unwrap()),
         });
         ok("crates.io/foo#bar", PackageIdSpec {
-            name: "bar".to_string(),
+            name: "bar".to_owned(),
             version: None,
             url: Some(url("cargo://crates.io/foo").unwrap()),
         });
         ok("crates.io/foo#bar:1.2.3", PackageIdSpec {
-            name: "bar".to_string(),
+            name: "bar".to_owned(),
             version: Some(Version::parse("1.2.3").unwrap()),
             url: Some(url("cargo://crates.io/foo").unwrap()),
         });
         ok("foo", PackageIdSpec {
-            name: "foo".to_string(),
+            name: "foo".to_owned(),
             version: None,
             url: None,
         });
         ok("foo:1.2.3", PackageIdSpec {
-            name: "foo".to_string(),
+            name: "foo".to_owned(),
             version: Some(Version::parse("1.2.3").unwrap()),
             url: None,
         });

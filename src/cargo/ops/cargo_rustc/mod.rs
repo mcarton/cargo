@@ -113,7 +113,7 @@ pub fn compile_targets<'a, 'cfg: 'a>(pkg_targets: &'a PackagesToBuild<'a>,
                         .display().to_string();
         cx.compilation.extra_env.entry(unit.pkg.package_id().clone())
           .or_insert(Vec::new())
-          .push(("OUT_DIR".to_string(), out_dir));
+          .push(("OUT_DIR".to_owned(), out_dir));
 
         for filename in try!(cx.target_filenames(unit)).iter() {
             let dst = cx.out_dir(unit).join(filename);

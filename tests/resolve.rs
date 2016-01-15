@@ -83,7 +83,7 @@ fn pkg_id(name: &str) -> PackageId {
 
 fn pkg_id_loc(name: &str, loc: &str) -> PackageId {
     let remote = loc.to_url();
-    let master = GitReference::Branch("master".to_string());
+    let master = GitReference::Branch("master".to_owned());
     let source_id = SourceId::for_git(&remote.unwrap(), master);
 
     PackageId::new(name, "1.0.0", &source_id).unwrap()
@@ -102,7 +102,7 @@ fn dep_req(name: &str, req: &str) -> Dependency {
 
 fn dep_loc(name: &str, location: &str) -> Dependency {
     let url = location.to_url().unwrap();
-    let master = GitReference::Branch("master".to_string());
+    let master = GitReference::Branch("master".to_owned());
     let source_id = SourceId::for_git(&url, master);
     Dependency::parse(name, Some("1.0.0"), &source_id).unwrap()
 }

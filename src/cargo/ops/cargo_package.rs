@@ -196,7 +196,7 @@ fn run_verify(config: &Config, pkg: &Package, tar: &Path)
     // `SourceId` we're telling it that the corresponding `PathSource` will be
     // considered updated and we won't actually read any packages.
     let registry = try!(SourceId::for_central(config));
-    let precise = Some("locked".to_string());
+    let precise = Some("locked".to_owned());
     let new_src = try!(SourceId::for_path(&dst)).with_precise(precise);
     let new_pkgid = try!(PackageId::new(pkg.name(), pkg.version(), &new_src));
     let new_summary = pkg.summary().clone().map_dependencies(|d| {

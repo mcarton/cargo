@@ -124,7 +124,7 @@ pub fn to_manifest(contents: &[u8],
     let pair = try!(manifest.to_manifest(source_id, &layout, config));
     let (mut manifest, paths) = pair;
     match d.toml {
-        Some(ref toml) => add_unused_keys(&mut manifest, toml, "".to_string()),
+        Some(ref toml) => add_unused_keys(&mut manifest, toml, "".to_owned()),
         None => {}
     }
     if !manifest.targets().iter().any(|t| !t.is_custom_build()) {
@@ -172,7 +172,7 @@ pub fn parse(toml: &str, file: &Path) -> CargoResult<toml::Table> {
                                         format!("-{}:{}", hiline + 1,
                                                 hicol + 1)
                                     } else {
-                                        "".to_string()
+                                        "".to_owned()
                                     },
                                     error.desc));
     }
@@ -683,7 +683,7 @@ fn process_dependencies<F>(cx: &mut Context,
         let reference = details.branch.clone().map(GitReference::Branch)
             .or_else(|| details.tag.clone().map(GitReference::Tag))
             .or_else(|| details.rev.clone().map(GitReference::Rev))
-            .unwrap_or_else(|| GitReference::Branch("master".to_string()));
+            .unwrap_or_else(|| GitReference::Branch("master".to_owned()));
 
         let new_source_id = match details.git {
             Some(ref git) => {

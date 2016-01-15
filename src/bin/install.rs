@@ -107,7 +107,7 @@ pub fn execute(options: Options, config: &Config) -> CliResult<Option<()>> {
         } else if let Some(rev) = options.flag_rev {
             GitReference::Rev(rev)
         } else {
-            GitReference::Branch("master".to_string())
+            GitReference::Branch("master".to_owned())
         };
         SourceId::for_git(&url, gitref)
     } else if let Some(path) = options.flag_path {

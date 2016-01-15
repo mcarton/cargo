@@ -102,7 +102,7 @@ fn existing_vcs_repo(path: &Path, cwd: &Path) -> bool {
 fn mk(config: &Config, path: &Path, name: &str,
       opts: &NewOptions) -> CargoResult<()> {
     let cfg = try!(global_config(config));
-    let mut ignore = "target\n".to_string();
+    let mut ignore = "target\n".to_owned();
     let in_existing_vcs_repo = existing_vcs_repo(path.parent().unwrap(), config.cwd());
     if !opts.bin {
         ignore.push_str("Cargo.lock\n");

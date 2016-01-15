@@ -337,7 +337,7 @@ pub fn process_error(msg: &str,
                      output: Option<&Output>) -> ProcessError {
     let exit = match status {
         Some(s) => s.to_string(),
-        None => "never executed".to_string(),
+        None => "never executed".to_owned(),
     };
     let mut desc = format!("{} ({})", &msg, exit);
 

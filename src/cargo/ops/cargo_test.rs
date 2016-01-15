@@ -49,7 +49,7 @@ pub fn run_benches(manifest_path: &Path,
                    options: &TestOptions,
                    args: &[String]) -> CargoResult<Option<CargoTestError>> {
     let mut args = args.to_vec();
-    args.push("--bench".to_string());
+    args.push("--bench".to_owned());
     let compilation = try!(compile_tests(manifest_path, options));
     let errors = try!(run_unit_tests(options, &args, &compilation));
     match errors.len() {
