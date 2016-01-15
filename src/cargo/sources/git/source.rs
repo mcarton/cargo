@@ -43,7 +43,7 @@ impl<'cfg> GitSource<'cfg> {
         let reference_path = match *reference {
             GitReference::Branch(ref s) |
             GitReference::Tag(ref s) |
-            GitReference::Rev(ref s) => s.to_string(),
+            GitReference::Rev(ref s) => s.clone(),
         };
         let checkout_path = config.git_checkout_path()
                                   .join(&ident)

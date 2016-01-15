@@ -151,7 +151,7 @@ impl PackageId {
     pub fn with_precise(&self, precise: Option<String>) -> PackageId {
         PackageId {
             inner: Arc::new(PackageIdInner {
-                name: self.inner.name.to_string(),
+                name: self.inner.name.clone(),
                 version: self.inner.version.clone(),
                 source_id: self.inner.source_id.with_precise(precise),
             }),

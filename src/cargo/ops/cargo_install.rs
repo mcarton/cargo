@@ -300,7 +300,7 @@ pub fn uninstall(root: Option<&str>,
 
         let bins = bins.iter().map(|s| {
             if s.ends_with(env::consts::EXE_SUFFIX) {
-                s.to_string()
+                s.clone()
             } else {
                 format!("{}{}", s, env::consts::EXE_SUFFIX)
             }

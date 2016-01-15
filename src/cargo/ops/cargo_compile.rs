@@ -169,7 +169,7 @@ pub fn compile_pkg<'a>(root_package: &Package,
         spec.iter().filter_map(|p| {
             match resolve_with_overrides.query(&p) {
                 Ok(p) => Some(p),
-                Err(..) => { invalid_spec.push(p.to_string()); None }
+                Err(..) => { invalid_spec.push(p.clone()); None }
             }
         }).collect::<Vec<_>>()
     } else {

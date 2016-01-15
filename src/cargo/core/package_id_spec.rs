@@ -92,12 +92,12 @@ impl PackageIdSpec {
                             } else {
                                 let version = try!(name_or_version.to_semver()
                                                                   .map_err(human));
-                                (path_name.to_string(), Some(version))
+                                (path_name.clone(), Some(version))
                             }
                         }
                     }
                 }
-                None => (path_name.to_string(), None),
+                None => (path_name.clone(), None),
             }
         };
         Ok(PackageIdSpec {
