@@ -113,7 +113,7 @@ fn process<V, F>(mut callback: F)
     })();
     let mut verbose_shell = shell(Verbose, Auto);
     let mut shell = config.as_ref().map(|s| s.shell());
-    let shell = shell.as_mut().map(|s| &mut **s).unwrap_or(&mut verbose_shell);
+    let shell = shell.as_mut().map_or(&mut verbose_shell, |s| &mut **s);
     process_executed(result, shell)
 }
 

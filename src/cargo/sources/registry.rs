@@ -429,7 +429,7 @@ impl<'cfg> RegistrySource<'cfg> {
 
         let dep = try!(DependencyInner::parse(&name, Some(&req),
                                               &self.source_id));
-        let kind = match kind.as_ref().map(|s| &s[..]).unwrap_or("") {
+        let kind = match kind.as_ref().map_or("", |s| &s[..]) {
             "dev" => Kind::Development,
             "build" => Kind::Build,
             _ => Kind::Normal,

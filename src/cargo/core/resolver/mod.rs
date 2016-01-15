@@ -645,7 +645,7 @@ impl Context {
 
     fn prev_active(&self, dep: &Dependency) -> &[Rc<Summary>] {
         let key = (dep.name().to_string(), dep.source_id().clone());
-        self.activations.get(&key).map(|v| &v[..]).unwrap_or(&[])
+        self.activations.get(&key).map_or(&[], |v| &v[..])
     }
 
     #[allow(deprecated)] // connect => join in 1.3

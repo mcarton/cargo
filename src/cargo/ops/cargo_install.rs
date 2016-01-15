@@ -129,8 +129,8 @@ fn select_pkg<'a, T>(mut source: T,
                         Box::new(source)))
                 }
                 None => {
-                    let vers_info = vers.map(|v| format!(" with version `{}`", v))
-                                        .unwrap_or(String::new());
+                    let vers_info = vers.map_or_else(String::new,
+                                                     |v| format!(" with version `{}`", v));
                     Err(human(format!("could not find `{}` in `{}`{}", name,
                                       source_id, vers_info)))
                 }

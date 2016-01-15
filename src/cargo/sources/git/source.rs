@@ -84,7 +84,7 @@ fn ident(url: &Url) -> String {
     //        Perhaps related to rust-lang/rust#15144
     let url = canonicalize_url(url);
     let ident = url.path().unwrap_or(&[])
-                   .last().map(|a| a.clone()).unwrap_or(String::new());
+                   .last().map_or_else(String::new, |a| a.clone());
 
     let ident = if ident == "" {
         "_empty".to_owned()
@@ -102,7 +102,7 @@ pub fn canonicalize_url(url: &Url) -> Url {
 
     // Strip a trailing slash
     if let url::SchemeData::Relative(ref mut rel) = url.scheme_data {
-        if rel.path.last().map(|s| s.is_empty()).unwrap_or(false) {
+        if rel.path.last().map_or(false, |s| s.is_empty()) {
             rel.path.pop();
         }
     }
@@ -127,7 +127,7 @@ pub fn canonicalize_url(url: &Url) -> Url {
     // Repos generally can be accessed with or w/o '.git'
     if let url::SchemeData::Relative(ref mut rel) = url.scheme_data {
         let needs_chopping = {
-            let last = rel.path.last().map(|s| &s[..]).unwrap_or("");
+            let last = rel.path.last().map_or("", |s| &s[..]);
             last.ends_with(".git")
         };
         if needs_chopping {

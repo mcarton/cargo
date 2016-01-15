@@ -56,8 +56,8 @@ impl EncodableResolve {
                     let to_depend_on = try!(edge.to_package_id(default));
                     let precise_pkgid =
                         tmp.get(&to_depend_on)
-                           .map(|p| to_depend_on.with_precise(p.clone()))
-                           .unwrap_or(to_depend_on.clone());
+                           .map_or(to_depend_on.clone(),
+                                   |p| to_depend_on.with_precise(p.clone()));
                     g.link(package_id.clone(), precise_pkgid);
                 }
                 Ok(())
